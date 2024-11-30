@@ -10,6 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EstablishmentsModule } from './establishments/establishments.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { MailService } from './mail/mail.service';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { MailService } from './mail/mail.service';
     ProductsModule,
     EstablishmentsModule,
     FavoritesModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailService],
