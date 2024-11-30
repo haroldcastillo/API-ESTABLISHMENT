@@ -43,9 +43,9 @@ export class AuthController {
       response.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true, // Set to true in production with HTTPS
-        sameSite: 'strict',
+        // sameSite: 'Strict',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        domain: this.configService.get('frontendURL'),
+        // domain: this.configService.get('frontendURL'),
       });
       return {
         accessToken,
