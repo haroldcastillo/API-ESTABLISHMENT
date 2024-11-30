@@ -1,0 +1,9 @@
+{
+  "serviceName": "nestjs-backend",
+  "build": {
+    "command": "npm run build"
+  },
+  "start": {
+    "command": "node dist/main"
+  }
+}
