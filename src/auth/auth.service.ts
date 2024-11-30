@@ -39,7 +39,7 @@ export class AuthService {
         <p>Hello ${email},</p>
         <p>Welcome to @Marikina! Were thrilled to have you on board and can't wait to help you discover the best spots in Marikina City. Whether you're looking for hidden gems, local favorites, or must-see attractions, we've got you covered!</p>
         <p>To ensure the security of your account and to start exploring all that Marikina has to offer, please verify your email by clicking the link below:</p>
-        <a href="http://localhost:3000/verify/${id}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; color: #fff; background-color: #4CAF50; text-decoration: none; border-radius: 5px; font-weight: bold;">Verify My Account</a>
+        <a href="https://atmarikina.vercel.app/verify/${id}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; color: #fff; background-color: #4CAF50; text-decoration: none; border-radius: 5px; font-weight: bold;">Verify My Account</a>
         <p style="margin-top:20px">If you didnt register on Marikina Destinations, please ignore this email.</p>
         <p>Thank you for joining us, and get ready for an exciting journey exploring Marikina!</p>
     </div>
@@ -51,7 +51,7 @@ export class AuthService {
     this.mailService.sendMail(
       email,
       'Welcome to Marikina Destinations! Please Verify Your Account to Start Exploring',
-      `Hello, please verify your account here: http://localhost:3000/verify/${id}`, // Plain text version
+      `Hello, please verify your account here: https://atmarikina.vercel.app/verify/${id}`, // Plain text version
       htmlContent, // HTML content
     );
   }
