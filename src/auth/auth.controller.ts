@@ -43,8 +43,9 @@ export class AuthController {
       response.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true, // Set to true in production with HTTPS
-        sameSite: 'lax', // Set to 'none' in production with HTTPS
+        sameSite: 'none', // Set to 'none' in production with HTTPS
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        path: '/',
       });
       return {
         accessToken,
