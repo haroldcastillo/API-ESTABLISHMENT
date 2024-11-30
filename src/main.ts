@@ -8,6 +8,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  // Access the underlying Express app
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  // Set 'trust proxy' to 1
+  expressApp.set('trust proxy', 1);
+
   // Enable CORS
   app.enableCors({
     origin: configService.get('frontendURL'),
