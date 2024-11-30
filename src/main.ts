@@ -10,13 +10,14 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: true, // Allows all origins
+    origin: configService.get('frontendURL'),
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
+
   // Use cookie parser
   app.use(cookieParser());
 
