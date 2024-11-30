@@ -15,6 +15,7 @@ import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { MailService } from '../mail/mail.service';
 import { stat } from 'fs';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,7 @@ export class AuthController {
     private authService: AuthService,
     private UserService: UsersService,
     private mailService: MailService,
+    private configService: ConfigService,
   ) {}
 
   @Post('login')
@@ -40,9 +42,10 @@ export class AuthController {
       // Set the refresh token in an HTTP-only cookie
       response.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: false, // Set to true in production with HTTPS
+        secure: true, // Set to true in production with HTTPS
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        domain: this.configService.get('frontendURL'),
       });
       return {
         accessToken,
@@ -76,7 +79,7 @@ export class AuthController {
   async getNewVerificationLink(@Req() req: Request) {
     try {
       const { id } = req.params;
-      const user = await this.UserService.findOne(id, 'id');  
+      const user = await this.UserService.findOne(id, 'id');
       console.log(user);
       if (!user) throw new BadRequestException('User not found');
       if (user.isVerified)
