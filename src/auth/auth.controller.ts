@@ -121,7 +121,13 @@ export class AuthController {
   }
   @Get('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('refreshToken');
+    response.clearCookie('refreshToken', {
+      httpOnly: true, // Set to true if your cookie was HttpOnly
+      secure: true, // Set to true if your cookie was Secure
+      sameSite: 'none', // Set SameSite option if it was used
+      path: '/', // Set path option if it was used
+    });
+
     return { message: 'Loggedout' };
   }
 }
