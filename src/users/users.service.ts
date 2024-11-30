@@ -7,7 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.schema';
+import { User } from './entities/User.schema';
 import { Model } from 'mongoose';
 import { hashPassword, comparePassword } from 'src/utils/bcrypt';
 
