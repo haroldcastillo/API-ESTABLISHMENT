@@ -1,7 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+import { Types } from 'mongoose';
+
 @Schema()
 export class Establishments {
+  _id: Types.ObjectId;
   @Prop({ required: true, unique: false })
   name: string;
 
