@@ -40,7 +40,9 @@ export class UsersController {
       return {
         _id: response._id,
         email: response.email,
-        name: response.name,
+        first_name: response.first_name,
+        last_name: response.last_name,
+        middle_name: response.middle_name,
         createdAt: response.createdAt,
         role: response.role,
         image: response.image,
@@ -63,15 +65,20 @@ export class UsersController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Req() req: Request) {
-    const { name, contactNumber, image } = (await req.body) as {
-      name: string;
-      contactNumber: string;
-      image: string;
-    };
+    const { first_name, last_name, middle_name, contactNumber, image } =
+      (await req.body) as {
+        first_name: string;
+        last_name: string;
+        middle_name: string;
+        contactNumber: string;
+        image: string;
+      };
     try {
       return {
         data: await this.usersService.update(id, {
-          name,
+          first_name,
+          last_name,
+          middle_name,
           contactNumber,
           image,
         }),

@@ -74,7 +74,7 @@ export class EstablishmentsService {
       const [establishments, total] = await Promise.all([
         this.establishmentsModel
           .find(query)
-          .sort({ views: -1 })
+          .sort({ rating: -1 }) // Sorting by rating in descending order
           .limit(limit)
           .skip(skip)
           .exec(),
@@ -110,6 +110,14 @@ export class EstablishmentsService {
     return this.establishmentsModel.findByIdAndUpdate(
       id,
       updateEstablishmentDto,
+      { new: true },
+    );
+  }
+
+  updateRating(id: string, rating: number) {
+    return this.establishmentsModel.findByIdAndUpdate(
+      id,
+      { rating },
       { new: true },
     );
   }

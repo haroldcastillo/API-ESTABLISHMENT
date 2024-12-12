@@ -10,6 +10,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/User.schema';
 import { Model } from 'mongoose';
 import { hashPassword, comparePassword } from 'src/utils/bcrypt';
+import { first } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,9 @@ export class UsersService {
     if (!superAdmin) {
       await this.createAdmin({
         email: process.env.SUPER_ADMIN_EMAIL,
-        name: 'Super Admin',
+        first_name: 'Super',
+        middle_name: '',
+        last_name: 'Admin',
         password: process.env.SUPER_ADMIN_PASSWORD,
         contactNumber: '09156626321',
         role: 'admin',
@@ -72,6 +75,7 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
+    console.log('updateUserDto', updateUserDto);
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
       new: true,
     });
@@ -83,7 +87,10 @@ export class UsersService {
     return {
       _id: result._id,
       email: result.email,
-      name: result.name,
+      first_name: result.first_name,
+      last_name: result.last_name,
+      contactNumber: result.contactNumber,
+      middle_name: result.middle_name,
       createdAt: result.createdAt,
       role: result.role,
       image: result.image,

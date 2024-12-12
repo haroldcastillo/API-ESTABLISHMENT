@@ -43,6 +43,9 @@ export class Establishments {
 
   @Prop({ required: true, unique: false, default: false })
   isVerified: boolean;
+
+  @Prop({ required: true, unique: false, default: 0 })
+  rating: number;
 }
 
 export const EstablishmentsSchema =

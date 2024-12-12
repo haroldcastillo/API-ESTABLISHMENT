@@ -4,13 +4,19 @@ import {
   IsEnum,
   IsNotEmpty,
   IsUrl,
-  isBoolean,
   IsBoolean,
 } from 'class-validator';
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  first_name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  last_name: string;
+
+  @IsString()
+  middle_name: string;
 
   @IsEmail()
   @IsNotEmpty()

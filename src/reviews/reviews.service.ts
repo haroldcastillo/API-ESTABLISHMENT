@@ -14,12 +14,44 @@ export class ReviewsService {
     private establishmentsService: EstablishmentsService,
     private usersService: UsersService,
   ) {}
-  create(createReviewDto: CreateReviewDto) {
+
+  async create(createReviewDto: CreateReviewDto) {
+    // Create a new review
     const newReview = new this.reviewsModel({
       ...createReviewDto,
       createdAt: Date.now(),
     });
-    return newReview.save();
+
+    // Fetch the establishment reviews, including the new one
+    const EstablishmentReviewsPo = await this.findEstablishmentReviews(
+      createReviewDto.establishmentId,
+      'establishmentId',
+    );
+
+    // Include the new review in the reviews array
+    const allReviews = [
+      ...EstablishmentReviewsPo.reviews,
+      {
+        rating: newReview.rating,
+        userId: createReviewDto.userId,
+        createdAt: newReview.createdAt,
+      },
+    ];
+
+    // Compute the updated rating
+    const updatedRating = this.computeRating(allReviews);
+    console.log(updatedRating);
+
+    // Optionally update the establishment's rating (if needed)
+    await this.establishmentsService.updateRating(
+      createReviewDto.establishmentId,
+      updatedRating,
+    );
+
+    // Save the new review
+    await newReview.save();
+
+    return newReview;
   }
 
   async findEstablishmentReviews(Id: string, type: string) {
@@ -48,7 +80,7 @@ export class ReviewsService {
     return {
       establishment: establishmentResponse,
       reviews: Reviews,
-      rating: this.computeRating(Reviews),
+      rating: this.computeRating(Reviews) || 0,
     };
   }
 
