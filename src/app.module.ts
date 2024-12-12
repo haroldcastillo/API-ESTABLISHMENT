@@ -23,8 +23,8 @@ import { ReviewsModule } from './reviews/reviews.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         // uri: configService.get<string>('MONGODB_URI'),
-        // uri: 'mongodb+srv://haroldjamescastillo1:beRmjGASOEzd41VY@establishment.if6qe.mongodb.net/',
-        uri: 'mongodb://localhost:27017/ESTABLISHMENT-RECOMMENDATION-SYSTEM',
+        uri: 'mongodb+srv://haroldjamescastillo1:beRmjGASOEzd41VY@establishment.if6qe.mongodb.net/',
+        // uri: 'mongodb://localhost:27017/ESTABLISHMENT-RECOMMENDATION-SYSTEM',
       }),
     }),
     AuthModule,
