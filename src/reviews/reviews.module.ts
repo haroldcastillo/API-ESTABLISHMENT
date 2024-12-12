@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EstablishmentsModule } from 'src/establishments/establishments.module';
 import { Reviews, ReviewsSchema } from './entities/reviews.entity';
 import { UsersModule } from 'src/users/users.module';
-
 @Module({
   imports: [
     MongooseModule.forFeature([

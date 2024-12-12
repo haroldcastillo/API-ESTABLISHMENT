@@ -157,4 +157,39 @@ export class UsersService {
       { new: true },
     );
   }
+
+  async addLastViewed(id: string, establishmentId: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    console.log('User found');
+
+    // Ensure `lastViewed` is always an array
+    const lastViewed: { establishmentId: string; date: any }[] =
+      user.lastViewed || [];
+
+    const existingIndex = lastViewed.findIndex(
+      (item) => item.establishmentId === establishmentId,
+    );
+
+    if (existingIndex !== -1) {
+      // Update the date as a timestamp
+      lastViewed[existingIndex].date = Date.now();
+    } else {
+      // Add new establishmentId and date
+      if (lastViewed.length >= 10) {
+        lastViewed.shift(); // Remove the oldest entry
+      }
+      lastViewed.push({ establishmentId, date: Date.now() });
+    }
+
+    await this.userModel.findByIdAndUpdate(id, { lastViewed });
+
+    return {
+      message: 'Last viewed establishment added successfully',
+      lastViewed,
+    };
+  }
 }

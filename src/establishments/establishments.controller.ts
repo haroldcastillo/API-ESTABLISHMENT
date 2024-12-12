@@ -146,4 +146,11 @@ export class EstablishmentsController {
       console.warn('Error', error);
     }
   }
+
+
+  @Get('lastViewed')
+  @UseGuards(JwtAuthGuard)
+  async lastViewed(@Req() req: Request) {
+    
+  }
 }

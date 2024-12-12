@@ -1,4 +1,5 @@
 import {
+  Post,
   Controller,
   Get,
   Body,
@@ -13,6 +14,7 @@ import {
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/guards/Jwt.guard';
 import { Request } from 'express';
+import { last } from 'rxjs';
 
 @Controller('users')
 export class UsersController {
@@ -45,6 +47,7 @@ export class UsersController {
         preferences: response.preferences,
         contactNumber: response.contactNumber,
         Image: response.image || '',
+        lastViewed: response.lastViewed,
       };
     } catch (e) {
       throw new NotFoundException();
@@ -84,10 +87,6 @@ export class UsersController {
   async updatePassword(@Param('id') id: string, @Req() req: Request) {
     const { password, newPassword } = await req.body;
 
-    console.log('Current Password:', password);
-    console.log('New Password:', newPassword); // Check if this logs correctly
-    console.log(req.body);
-
     try {
       const updatedUser = await this.usersService.updatePassword(
         id,
@@ -104,6 +103,23 @@ export class UsersController {
         error.message,
         error.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  @Post('lastview/:id')
+  // @UseGuards(JwtAuthGuard)
+  async addLastViewedEstablishment(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ) {
+    try {
+      const { establishmentId } = await req.body;
+      return {
+        data: await this.usersService.addLastViewed(id, establishmentId),
+        accessToken: req.user,
+      };
+    } catch (error) {
+      console.warn('Error', error);
     }
   }
 }

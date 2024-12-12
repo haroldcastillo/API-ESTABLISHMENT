@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { EstablishmentsService } from './establishments.service';
 import { EstablishmentsController } from './establishments.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -7,7 +7,6 @@ import {
   EstablishmentsSchema,
 } from './entities/Establishments.schema';
 import { AuthModule } from 'src/auth/auth.module';
-import { FavoritesModule } from 'src/favorites/favorites.module';
 
 @Module({
   imports: [

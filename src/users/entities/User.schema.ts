@@ -20,6 +20,8 @@ export class User {
   preferences: string[];
   @Prop({ required: false, unique: false, default: false })
   isVerified: boolean;
+  @Prop({ required: false, unique: false })
+  lastViewed: [{ establishmentId: string; date: Date }];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -6,7 +6,6 @@ import { Model, set } from 'mongoose';
 import { Establishments } from './entities/Establishments.schema';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/Jwt.guard';
-import { max } from 'class-validator';
 
 @UseGuards(JwtAuthGuard)
 @Injectable()
@@ -38,7 +37,7 @@ export class EstablishmentsService {
     search: string,
     currentPage: number,
   ) {
-    const limit = 10;
+    const limit = 100;
     const skip = (currentPage - 1) * limit;
 
     // Building the query
