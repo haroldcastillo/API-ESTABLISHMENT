@@ -16,7 +16,7 @@ export class CreateUserDto {
   last_name: string;
 
   @IsString()
-  middle_name: string;
+  middle_name?: string;
 
   @IsEmail()
   @IsNotEmpty()
@@ -27,8 +27,7 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  @IsNotEmpty()
-  contactNumber: string;
+  contactNumber?: string;
 
   @IsEnum(['admin', 'user'], { message: 'role must be either admin or user' })
   role: 'admin' | 'user';

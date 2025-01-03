@@ -12,7 +12,7 @@ export class User {
   password: string;
   @Prop({ required: true, unique: true })
   email: string;
-  @Prop({ required: true, unique: false })
+  @Prop({ required: false, unique: false })
   contactNumber: string;
   @Prop({ required: true, unique: false })
   role: string;

@@ -46,6 +46,9 @@ export class Establishments {
 
   @Prop({ required: true, unique: false, default: 0 })
   rating: number;
+
+  @Prop({ required: false, unique: false })
+  totalReviews: number;
 }
 
 export const EstablishmentsSchema =

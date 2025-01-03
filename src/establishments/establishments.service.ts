@@ -114,12 +114,13 @@ export class EstablishmentsService {
     );
   }
 
-  updateRating(id: string, rating: number) {
+  updateRating(id: string, rating: number, totalReviews: number) {
     return this.establishmentsModel.findByIdAndUpdate(
       id,
-      { rating },
+      { rating, totalReviews },
       { new: true },
     );
+    
   }
 
   remove(id: string) {

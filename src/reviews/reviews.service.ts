@@ -46,6 +46,7 @@ export class ReviewsService {
     await this.establishmentsService.updateRating(
       createReviewDto.establishmentId,
       updatedRating,
+      allReviews.length,
     );
 
     // Save the new review
@@ -90,6 +91,9 @@ export class ReviewsService {
       totalRating += review.rating;
     });
     return totalRating / reviews.length;
+  }
+  totalReviewsForEstablishment(id: string) {
+    return this.reviewsModel.find({ establishmentId: id }).countDocuments();
   }
 
   findAll() {
