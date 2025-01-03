@@ -12,6 +12,7 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { MailService } from './mail/mail.service';
 import { ReviewsModule } from './reviews/reviews.module';
 import { BucketlistModule } from './bucketlist/bucketlist.module';
+import { JourneyModule } from './journey/journey.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { BucketlistModule } from './bucketlist/bucketlist.module';
     FavoritesModule,
     ReviewsModule,
     BucketlistModule,
+    JourneyModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailService],
