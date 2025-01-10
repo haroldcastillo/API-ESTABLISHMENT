@@ -90,25 +90,54 @@ export class ReviewsService {
     reviews.forEach((review) => {
       totalRating += review.rating;
     });
-    return totalRating / reviews.length;
+    return Math.round(totalRating / reviews.length);
   }
   totalReviewsForEstablishment(id: string) {
     return this.reviewsModel.find({ establishmentId: id }).countDocuments();
   }
 
   findAll() {
-    return `This action returns all reviews`;
+    return this.reviewsModel.find();
   }
 
   findOne(id: number) {
     return `This action returns a #${id} review`;
   }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  async update(id: any, updateReviewDto: UpdateReviewDto) {
+    const updatedReview = await this.reviewsModel.findByIdAndUpdate(
+      id,
+      updateReviewDto,
+      { new: true },
+    );
+
+    // Fetch the establishment reviews
+    const allReviews = await this.findAll();
+    const updatedRating = this.computeRating(allReviews);
+
+    // Optionally update the establishment's rating (if needed)
+    await this.establishmentsService.updateRating(
+      updatedReview.establishmentId,
+      updatedRating,
+      allReviews.length,
+    );
+
+    return updatedReview;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: string) {
+    const deleted = await this.reviewsModel.findByIdAndDelete(id);
+
+    // Fetch the establishment reviews
+    const allReviews = await this.findAll();
+    const updatedRating = this.computeRating(allReviews);
+
+    // Optionally update the establishment's rating (if needed)
+    await this.establishmentsService.updateRating(
+      deleted.establishmentId,
+      updatedRating,
+      allReviews.length,
+    );
+    return deleted;
   }
 }

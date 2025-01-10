@@ -66,6 +66,7 @@ export class ReviewsController {
   update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
     return this.reviewsService.update(+id, updateReviewDto);
   }
+
   @Get('totalReviews/:id')
   async totalReviews(@Param('id') id: string, @Req() req: Request) {
     try {
@@ -81,9 +82,31 @@ export class ReviewsController {
       };
     }
   }
+  @Patch('updateRating/:id')
+  async updateRating(@Param('id') id: string, @Req() req: Request) {
+    try {
+      let result = await this.reviewsService.update(id, req.body);
+      return {
+        data: result,
+        // accessToken: req.user,
+      };
+    } catch (error) {
+      console.warn('Error', error);
+      return {
+        status: 500,
+      };
+    }
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.reviewsService.remove(+id);
+    try {
+      return this.reviewsService.remove(id);
+    } catch (error) {
+      console.warn('Error', error);
+      return {
+        status: 500,
+      };
+    }
   }
 }

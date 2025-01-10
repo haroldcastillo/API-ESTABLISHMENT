@@ -12,6 +12,8 @@ export class Reviews {
   rating: number;
   @Prop({ required: false, unique: false })
   comment: string;
+  @Prop({ required: false, unique: false })
+  photo: string[];
 }
 
 export const ReviewsSchema = SchemaFactory.createForClass(Reviews);

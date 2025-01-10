@@ -3,4 +3,5 @@ export class CreateReviewDto {
   establishmentId: string;
   rating: number;
   comment: string;
+  photo: string[];
 }
