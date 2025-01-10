@@ -23,7 +23,7 @@ export class AuthService {
   }): Promise<any> {
     const user = await this.userService.findOne(email, 'email');
     console.log(user);
-    if (!user) return null;
+    if (!user) throw new UnauthorizedException('Invalid Email');
     if (!user || !comparePassword(password, user.password))
       throw new UnauthorizedException('Invalid Password');
     if (!user.isVerified) throw new UnauthorizedException('Email not verified');
@@ -56,6 +56,31 @@ export class AuthService {
     );
   }
 
+  async sendPasswordResetEmail(email: string, id: string, expiryDate: number) {
+    const htmlContent = `<div style="max-width: 600px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          <h2 style="text-align: center; color: #4CAF50;">Reset Password</h2>
+          <div style="margin-top: 20px; line-height: 1.6;">
+              <p>Dear ${email},</p>
+              <p>We received a request to reset the password for your account associated with this email address. If you made this request, please click the button below to reset your password:</p>
+              <a href="https://atmarikina.vercel.app/reset-password/${id}/${expiryDate}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; color: #fff; background-color: #4CAF50; text-decoration: none; border-radius: 5px; font-weight: bold;">Verify My Account</a>
+              <p style="margin-top:20px">If you dont request for reset, Somone is trying to access your account, If you have any questions, feel free to contact our support team.</p>
+              <p>Thank you,</p>
+          </div>
+          <div style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
+              <p>Warm regards,</p>
+              <p>The Marikina Destinations Team</p>
+          </div>
+      </div>
+    `;
+    this.mailService.sendMail(
+      email,
+      'Reset Password',
+      `Hello, please reset your password here: https://atmarikina.vercel.app/reset-password/${id}/${expiryDate}`, // Plain text version
+      htmlContent, // HTML content
+    );
+    return 'Reset link sent';
+  }
+
   // Generate the refresh token
   generateRefreshToken(payload: Object) {
     return this.jwtService.sign(payload, {
@@ -82,5 +107,21 @@ export class AuthService {
     } else {
       return this.generateAccessToken({ refreshToken: decoded.refreshToken });
     }
+  }
+
+  // forgot password
+  async forgotPassword(email: string) {
+    const user = await this.userService.findOne(email, 'email');
+    if (!user) throw new UnauthorizedException('Invalid Email');
+    if (!user.isVerified) throw new UnauthorizedException('Email not verified');
+    const userId = user._id.toString();
+    await this.sendVerificationEmail(email, userId);
+    return { message: 'Verification link sent' };
+  }
+
+  async createExpiryDate(): Promise<number> {
+    const now = new Date(); // Get the current date and time
+    now.setMinutes(now.getMinutes() + 5); // Add 5 minutes
+    return now.getTime(); // Return the timestamp in milliseconds
   }
 }

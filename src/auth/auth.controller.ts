@@ -130,4 +130,40 @@ export class AuthController {
 
     return { message: 'Loggedout' };
   }
+
+  @Post('forgot-password')
+  async forgotPassword(@Req() req: Request) {
+    try {
+      const { email } = req.body;
+      const user = await this.UserService.findOne(email, 'email');
+      if (!user) throw new BadRequestException('Invalid Email');
+      if (!user.isVerified) throw new BadRequestException('Email not verified');
+      const userId = user._id.toString();
+      const expiryDate = await this.authService.createExpiryDate();
+      const message = await this.authService.sendPasswordResetEmail(
+        email,
+        userId,
+        expiryDate,
+      );
+
+      return {
+        expiryDate: expiryDate,
+        message: message,
+      };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  @Post('reset-password/:id')
+  async resetPassword(@Req() req: Request) {
+    try {
+      const { id } = req.params;
+      const { password } = req.body;
+      await this.UserService.changePassword(id, password);
+      return { message: 'Password reset successful' };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
 }

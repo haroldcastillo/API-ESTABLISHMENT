@@ -135,6 +135,20 @@ export class UsersService {
     }; // Return the updated user
   }
 
+  async changePassword(id: string, newPassword: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    const brandNewPassword = hashPassword(newPassword);
+    await this.userModel.findByIdAndUpdate(id, {
+      password: brandNewPassword,
+    });
+    return {
+      message: 'Password updated successfully',
+    };
+  }
+
   findAll() {
     const users = this.userModel.find(
       { role: { $ne: 'admin' } },
