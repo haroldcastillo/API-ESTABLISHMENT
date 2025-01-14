@@ -56,11 +56,48 @@ export class AuthController {
     }
   }
 
+  @Post('google-login')
+  async googleLogin(
+    @Req() req: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    try {
+      const user = await this.UserService.findOne(req.body.email, 'email');
+
+      if (!user) {
+        return {
+          message: 'User not found',
+          status: 404,
+        };
+      }
+      const _id = user._id;
+
+      const refreshToken = await this.authService.generateRefreshToken({ _id });
+      const accessToken = await this.authService.generateAccessToken({
+        refreshToken,
+      });
+      // Set the refresh token in an HTTP-only cookie
+      response.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true, // Set to true in production with HTTPS
+        sameSite: 'none', // Set to 'none' in production with HTTPS
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+      return {
+        accessToken,
+        userId: _id,
+      };
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   @Post('register')
   async register(
     @Req() req: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
+    console.log(req.body);
     try {
       const user = (await this.UserService.create(
         req.body as CreateUserDto,
